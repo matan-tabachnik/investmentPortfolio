@@ -1,5 +1,5 @@
 # Investment Portfolio Calculator
-A Full Stack web application for calculating real-time portfolio values with live stock prices, featuring Hebrew language support and smart caching.
+A Full Stack web application for calculating real-time portfolio values with live stock prices,with smart caching.
 
 **Developed by:** [Matan Tabachnik]
 
