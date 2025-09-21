@@ -6,7 +6,6 @@ import {
   Button,
   Box,
   Typography,
-  IconButton
 } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 
@@ -66,7 +65,6 @@ export default function PortfolioForm({
       return;
     }
 
-  
     const validItems = items.filter(item => 
       item.symbol.trim() && item.quantity > 0
     );
@@ -110,10 +108,7 @@ export default function PortfolioForm({
           <Box 
             key={index} 
             sx={{ 
-              display: 'flex', 
-              gap: 2, 
               mb: 2, 
-              alignItems: 'flex-start',
               p: 2,
               backgroundColor: 'grey.50',
               borderRadius: 1,
@@ -121,49 +116,76 @@ export default function PortfolioForm({
               borderColor: 'grey.200'
             }}
           >
-            <TextField
-              label="סימבול"
-              value={item.symbol}
-              onChange={(e) => updateItem(index, 'symbol', e.target.value)}
-              placeholder="AAPL"
-              size="small"
-              sx={{ minWidth: 120, flex: 1 }}
-            />
-            <TextField
-              label="כמות"
-              type="number"
-              value={item.quantity || ''}
-              onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value) || 0)}
-              placeholder="100"
-              size="small"
-              sx={{ minWidth: 100, flex: 1 }}
-            />
-            <Box sx={{ display: 'flex', gap: 1, mt: 0.5 }}>
-              <IconButton
+            <Box sx={{
+              display: 'flex',
+              gap: 2,
+              mb: 2,
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: 'stretch'
+            }}>
+              <TextField
+                label="סימבול"
+                value={item.symbol}
+                onChange={(e) => updateItem(index, 'symbol', e.target.value)}
+                placeholder="AAPL"
+                size="small"
+                sx={{ 
+                  flex: 1,
+                  minWidth: { xs: '100%', sm: 120 }
+                }}
+              />
+              <TextField
+                label="כמות"
+                type="number"
+                value={item.quantity || ''}
+                onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value) || 0)}
+                placeholder="100"
+                size="small"
+                sx={{ 
+                  flex: 1,
+                  minWidth: { xs: '100%', sm: 100 }
+                }}
+              />
+            </Box>
+
+            <Box sx={{ 
+              display: 'flex', 
+              gap: 2,
+              justifyContent: { xs: 'center', sm: 'flex-start' },
+              flexWrap: 'wrap'
+            }}>
+              <Button
                 onClick={() => removeItem(index)}
                 disabled={items.length === 1}
-                size="small"
+                variant="outlined"
                 color="error"
+                size="small"
+                startIcon={<Remove />}
                 sx={{ 
-                  backgroundColor: 'error.50',
-                  '&:hover': { backgroundColor: 'error.100' }
+                  minWidth: { xs: 120, sm: 80 },
+                  minHeight: { xs: 44, sm: 36 },
+                  fontSize: { xs: '0.875rem', sm: '0.75rem' }
                 }}
               >
-                <Remove />
-              </IconButton>
+                הסר שורה
+              </Button>
+              
               {index === items.length - 1 && (
-                <IconButton
+                <Button
                   onClick={addItem}
                   disabled={items.length >= 50}
-                  size="small"
+                  variant="contained"
                   color="primary"
+                  size="small"
+                  startIcon={<Add />}
                   sx={{ 
-                    backgroundColor: 'primary.50',
-                    '&:hover': { backgroundColor: 'primary.100' }
+                    minWidth: { xs: 120, sm: 80 },
+                    minHeight: { xs: 44, sm: 36 },
+                    fontSize: { xs: '0.875rem', sm: '0.75rem' }
                   }}
                 >
-                  <Add />
-                </IconButton>
+                  הוסף שורה
+                </Button>
               )}
             </Box>
           </Box>
@@ -174,7 +196,11 @@ export default function PortfolioForm({
           onClick={handleSubmit}
           disabled={loading}
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{ 
+            mt: 2,
+            minHeight: { xs: 48, sm: 36 },
+            fontSize: { xs: '1rem', sm: '0.875rem' }
+          }}
         >
           {loading ? 'מחשב...' : 'חשב תיק'}
         </Button>

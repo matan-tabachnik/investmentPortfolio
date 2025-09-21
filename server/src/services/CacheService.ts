@@ -5,7 +5,7 @@ interface CacheItem {
   
   class PriceCache {
     private cache = new Map<string, CacheItem>();
-    private readonly TTL = 5 * 60 * 1000; 
+    private readonly TTL = 20 * 1000; //20  sec 
   
     set(symbol: string, price: number): void {
       this.cache.set(symbol.toUpperCase(), {
@@ -52,4 +52,4 @@ interface CacheItem {
   
   setInterval(() => {
         priceCache.cleanup();
-  }, 10 * 60 * 1000);
+  }, 3 * 60 * 1000);
