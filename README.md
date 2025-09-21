@@ -3,6 +3,12 @@ A Full Stack web application for calculating real-time portfolio values with liv
 
 **Developed by:** [Matan Tabachnik]
 
+## Quick start - use the deployed application
+**Deployment**
+The frontend and backend are already deployed:
+* Open the Frontend hosted from Vercel: https://investment-portfolio-seven.verce
+* FYI, the Backend is deployed on Render: https://investmentportfolio.onrender.coml.app/
+
 ## Features
 - Real-time portfolio valuation using TwelveData API
 - Smart caching system (5-minute TTL) to optimize API calls
@@ -20,11 +26,10 @@ A Full Stack web application for calculating real-time portfolio values with liv
 * Node.js + TypeScript
 * Express
 
-**Infra**
-* Render: https://investmentportfolio.onrender.com
-* Vercel: https://investment-portfolio-seven.vercel.app/
 
-### How to run the Backend
+## Overview
+
+### Backend
 ```bash
 cd investment-portfolio-server
 npm ci
@@ -39,7 +44,7 @@ Caching: in‑memory map keyed by symbol; entries expire after 5 minutes Improve
 
 Normalization & validation: symbols uppercased; invalid rows marked with error and excluded from total.
 
-### How to run the Frontend
+### Frontend
 ```bash
 cd ../investment-portfolio-client
 npm ci
