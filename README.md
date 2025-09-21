@@ -6,7 +6,7 @@ A Full Stack web application for calculating real-time portfolio values with liv
 ## Quick start - use the deployed application
 **Deployment**
 The frontend and backend are already deployed:
-* Open the Frontend hosted from Vercel: https://investment-portfolio-seven.vercel
+* Open the Frontend hosted from Vercel: [https://investment-portfolio-seven.vercel](https://investment-portfolio-seven.vercel.app/)
 * FYI, the Backend is deployed on Render: https://investmentportfolio.onrender.com.app/
 
 ## Features
