@@ -27,7 +27,7 @@ A full‑stack web application for calculating **real‑time portfolio values** 
 ## ✨ Features
 
 * Real‑time portfolio valuation (via Twelve Data API)
-* **Smart in‑memory cache** (5‑minute TTL) to reduce provider calls
+* **Smart in‑memory cache** (20 sec TTL) to reduce provider calls
 * **History** persisted in `localStorage`
 * Responsive **Material‑UI** design
 * **Validation** on both client and server (symbols & quantities)
@@ -95,7 +95,6 @@ npm run dev            # open the printed URL
 PORT=8081                               # optional; hosting often sets this automatically
 TWELVE_BASE_URL=https://api.twelvedata.com
 TWELVE_API_KEY=YOUR_TWELVE_API_KEY_HERE # <-- placeholder only
-CACHE_TTL_MS=300000                     # 5 minutes
 ```
 
 ### Frontend (`investment-portfolio-client/.env.example`)
@@ -144,7 +143,7 @@ Rows with `error` are displayed but excluded from the `total`.
 * Start: `node dist/index.js`
 * Ensure the app listens on `process.env.PORT`;
 
-**Frontend (Static Site on Vercel/Netlify/Render)**
+**Frontend (Static Site on Vercel)**
 
 * Build: `npm ci && npm run build`
 * Publish dir: `dist` (Vite)
