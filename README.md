@@ -24,7 +24,7 @@ A Full Stack web application for calculating real-time portfolio values with liv
 * Render: https://investmentportfolio.onrender.com
 * Vercel: https://investment-portfolio-seven.vercel.app/
 
-### Backend
+### How to run the Backend
 ```bash
 cd investment-portfolio-server
 npm ci
@@ -39,7 +39,7 @@ Caching: in‑memory map keyed by symbol; entries expire after 5 minutes Improve
 
 Normalization & validation: symbols uppercased; invalid rows marked with error and excluded from total.
 
-### Frontend
+### How to run the Frontend
 ```bash
 cd ../investment-portfolio-client
 npm ci
