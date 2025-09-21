@@ -1,78 +1,117 @@
 # Investment Portfolio Calculator
-A Full Stack web application for calculating real-time portfolio values with live stock prices,with smart caching.
 
-**Developed by:** [Matan Tabachnik]
+A full‑stack web application for calculating **real‑time portfolio values** from live stock prices, with a **Hebrew UI** and **smart caching** to reduce API calls. Enter ticker symbols and quantities, submit, and get a per‑position breakdown (price, value) and a **total**—with inline error messages for invalid symbols and a local **history** of calculations.
 
-## Quick start - use the deployed application
-**Deployment**
-The frontend and backend are already deployed:
-* Open the Frontend hosted from Vercel: [https://investment-portfolio-seven.vercel](https://investment-portfolio-seven.vercel.app/)
-* FYI, the Backend is deployed on Render: https://investmentportfolio.onrender.com.app/
+**Developed by:** Matan Tabachnik
 
-## Features
-- Real-time portfolio valuation using TwelveData API
-- Smart caching system (5-minute TTL) to optimize API calls
-- Portfolio calculation history with localStorage
-- Responsive Material-UI design
-- Input validation on both client and server
+---
 
-## Tech Stack
-**Frontend**
-* React (TypeScript)
-* Material UI (MUI)
-* Vite 
+## 🔗 Live Demo
 
-**Backend**
-* Node.js + TypeScript
-* Express
+* **Frontend (Vercel):** [https://investment-portfolio-seven.vercel.app/](https://investment-portfolio-seven.vercel.app/)
+* **Backend (Render):** [https://investmentportfolio.onrender.com](https://investmentportfolio.onrender.com)
 
+> The frontend consumes the backend at `VITE_API_URL`. In production, set it to the Render API base (e.g., `https://investmentportfolio.onrender.com/api`).
 
-## Overview
+---
+
+## 🚀 How to Use (End Users)
+
+1. Open the **frontend** link.
+2. In **"הזן מניות"**, add rows for each position (e.g., `AAPL`, `MSFT`) and set quantities.
+3. Click **"חשב תיק"**.
+4. See the **results table**: each row shows `Symbol, Quantity, Price, Value`. Errors are shown inline and excluded from the total.
+5. Review **history** at the bottom; the latest run is highlighted. Use **"נקה"** to clear history.
+
+---
+
+## ✨ Features
+
+* Real‑time portfolio valuation (via Twelve Data API)
+* **Smart in‑memory cache** (5‑minute TTL) to reduce provider calls
+* **History** persisted in `localStorage`
+* Responsive **Material‑UI** design
+* **Validation** on both client and server (symbols & quantities)
+
+---
+
+## 🧱 Tech Stack
+
+**Frontend:** React (TypeScript), Material UI (MUI), Vite
+**Backend:** Node.js (TypeScript), Express
+**Infra:** Frontend on Vercel/Render Static • Backend on Render
+
+---
+
+## 🧭 Architecture Overview (What each side does)
+
+### Frontend Overview
+
+* **`App.tsx`** – Orchestrates the flow: submit → call API → store result → refresh history
+* **`components/PortfolioForm.tsx`** – Add/remove up to 50 rows; validate `symbol` & `quantity`; normalize (`symbol.trim().toUpperCase()`, positive integer)
+* **`components/ResultsTable.tsx`** – Loading/empty/data states; per‑row errors via `ErrorDisplay`; total computed from **valid** rows only
+* **`components/HistoryPanel.tsx`** – Reads/saves results in `localStorage`; shows latest at top; supports **Clear**
+* **`utils/MoneyUtils.ts`** – `fmtUSD` formatter (can be generalized to `fmtMoney(amount, currency)`)
+* **`utils/StorageUtils.ts`** – `pushHistory`, `loadHistory`, `clearHistory`
+
+### Backend Overview
+
+* **Endpoint:** `POST /api/quote` → accepts an array of `{ symbol, quantity }`; returns `{ items, total, currency, asOf, warnings? }`
+* **Caching:** in‑memory map per `symbol` with **5‑minute TTL** (configurable) to reduce latency and API usage
+* **Normalization & Validation:** symbols uppercased; invalid rows return `error` and are excluded from `total`
+* **Error Handling:** maps upstream issues (invalid symbol / network / 429) to a stable error shape
+* **Health Check:** `/healthz` returns `200 OK`
+
+---
+
+## 🛠️ Run Locally (Developers)
 
 ### Backend
+
 ```bash
 cd investment-portfolio-server
 npm ci
-cp .env.example .env   # fill env vars below
+cp .env.example .env   # fill env vars (see Environment below)
 npm run build
-npm start              # serves on process.env.PORT
+npm start              # listens on $PORT (or default if implemented)
 ```
 
-Endpoint: POST /api/quote – accepts an array of { symbol, quantity }; returns { items, total, currency, asOf, warnings? }.
-
-Caching: in‑memory map keyed by symbol; entries expire after 5 minutes Improves latency and reduces API usage.
-
-Normalization & validation: symbols uppercased; invalid rows marked with error and excluded from total.
-
 ### Frontend
+
 ```bash
 cd ../investment-portfolio-client
 npm ci
-cp .env.example .env   # set VITE_API_URL to backend URL (e.g., http://localhost:8081/api)
+cp .env.example .env   # set VITE_API_URL to your backend (e.g., http://localhost:8081/api)
 npm run dev            # open the printed URL
-
-components/PortfolioForm.tsx – Add/remove up to 50 rows, validate symbol and quantity, normalize (symbol.trim().toUpperCase(), positive integer quantity).
-
-components/ResultsTable.tsx – Loading/empty/data states, per‑row errors via ErrorDisplay, total computed from valid rows only.
-
-components/HistoryPanel.tsx – Reads/saves history in localStorage, highlights latest run, supports “Clear”.
-
-utils/MoneyUtils.ts – fmtUSD currency formatter 
-
-utils/StorageUtils.ts – pushHistory, loadHistory, clearHistory helpers.
 ```
 
-## Environment
-**Backend (.env)**
-* `TWELVE_BASE_URL` (e.g., `https://api.twelvedata.com`)
-* `TWELVE_API_KEY` (e.g., `abc123def456ghi789jkl012mno345pqr678stu901`)
-* `PORT` (e.g., `8081`)
+---
 
-**Frontend (.env)**
-* `VITE_API_URL` → backend base URL (e.g., `http://localhost:8081/api`)
+## 🔐 Environment
 
-## API 
+> Include **examples**, never real secrets. Commit a `.env.example` with placeholders and keep your real `.env` out of Git (use `.gitignore`).
+
+### Backend (`investment-portfolio-server/.env.example`)
+
+```env
+PORT=8081                               # optional; hosting often sets this automatically
+TWELVE_BASE_URL=https://api.twelvedata.com
+TWELVE_API_KEY=YOUR_TWELVE_API_KEY_HERE # <-- placeholder only
+CACHE_TTL_MS=300000                     # 5 minutes
+```
+
+### Frontend (`investment-portfolio-client/.env.example`)
+
+```env
+VITE_API_URL=http://localhost:8081/api
+```
+
+---
+
+## 📡 API (Quick Reference)
+
 `POST /api/quote`
+
 ```json
 [
   { "symbol": "AAPL", "quantity": 10 },
@@ -80,7 +119,8 @@ utils/StorageUtils.ts – pushHistory, loadHistory, clearHistory helpers.
 ]
 ```
 
-Returns (shape):
+Returns:
+
 ```json
 {
   "items": [
@@ -93,4 +133,27 @@ Returns (shape):
 }
 ```
 
-Rows with `error` are displayed but excluded from `total`.
+Rows with `error` are displayed but excluded from the `total`.
+
+---
+
+## 📦 Deployment (Summary)
+
+**Backend (Render → Web Service)**
+
+* Root Directory: `investment-portfolio-server`
+* Build: `npm ci && npm run build`
+* Start: `node dist/index.js`
+* Ensure the app listens on `process.env.PORT`; expose `/healthz`
+
+**Frontend (Static Site on Vercel/Netlify/Render)**
+
+* Build: `npm ci && npm run build`
+* Publish dir: `dist` (Vite)
+* Env: `VITE_API_URL` → backend URL
+
+---
+
+## 📄 License
+
+MIT (or update to your preferred license).
